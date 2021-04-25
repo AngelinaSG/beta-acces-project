@@ -51,7 +51,6 @@
 
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
-import axios from "axios";
 
 export default {
   name: "auth",
@@ -77,8 +76,8 @@ export default {
       }
 
       try {
-        const response = await axios.get("./server/codes.json");
-        console.log(response);
+        await this.$store.dispatch("signInByCode", this.code);
+        this.$router.push("/");
       } catch (e) {
         console.log(e);
       }
