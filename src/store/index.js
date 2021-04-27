@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
@@ -32,22 +31,26 @@ export default new Vuex.Store({
     async signInByCode({ dispatch, commit }, userCode) {
 
       try {
-        const response = await axios.get("./server/codes.json");
+        const response = await this._vm.$api.auth.signIn();
+        console.log(response);
         const authAccess = response.data.code.includes(userCode);
         if (authAccess) {
           commit("userAuth")
+          localStorage.setItem('logged_in', true)
         }
       }
       catch (e) {
-
+        commit('setError', e)
+        throw e
       }
     },
 
     signOut({ dispatch, commit }) {
       commit("userLogout")
+      localStorage.setItem('logged_in', false)
     }
   },
   modules: {
   },
-  plugins: [createPersistedState()]
+  plugins: [createPersistedState()],
 })

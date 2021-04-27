@@ -1,9 +1,9 @@
 export default function guest({ next, store }) {
-    if (store.getters.auth.loggedIn) {
+    const auth = JSON.parse(localStorage.getItem("logged_in"))
+    if (auth) {
         return next({
             name: 'home'
         })
     }
-
     return next()
 }

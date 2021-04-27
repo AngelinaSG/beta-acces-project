@@ -1,6 +1,7 @@
 <template>
   <div class="grey darken-1 empty-layout">
-    <div class="card auth-card">
+    <Loader v-if="isLoading" />
+    <div v-else class="card auth-card">
       <div class="card-content">
         <span class="card-title center">Упс.. Ошибочка!</span>
         <p>
@@ -22,7 +23,7 @@
                   ($v.code.$dirty && !$v.code.minLength),
               }"
             />
-            <label for="code">Твой код для доступа к сайту</label>
+            <label for="code">Введи код</label>
             <small
               class="helper-text invalid"
               v-if="$v.code.$dirty && !$v.code.required"
@@ -51,11 +52,14 @@
 
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
+import Loader from "../components/Loader.vue";
 
 export default {
   name: "auth",
+  components: { Loader },
   data: () => ({
     code: "",
+    isLoading: false,
   }),
 
   validations: {
@@ -68,6 +72,10 @@ export default {
     }, 0);
   },
 
+  beforeDestroy() {
+    M.Toast.dismissAll();
+  },
+
   methods: {
     async submitHandler() {
       if (this.$v.$invalid) {
@@ -76,11 +84,16 @@ export default {
       }
 
       try {
+        this.isLoading = true;
         await this.$store.dispatch("signInByCode", this.code);
-        this.$router.push("/");
-      } catch (e) {
-        console.log(e);
-      }
+        if (this.$store.getters.auth) {
+          this.$router.push("/");
+        } else {
+          this.code = "";
+          this.isLoading = false;
+          this.$message("Такого кода не существует");
+        }
+      } catch (e) {}
     },
   },
 };

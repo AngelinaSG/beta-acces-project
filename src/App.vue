@@ -5,7 +5,32 @@
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapGetters({ auth: "auth" }),
+    authState() {
+      return JSON.parse(localStorage.getItem("vuex")).loggedIn;
+    },
+  },
+  mounted() {
+    window.addEventListener("storage", this.storageChange, false);
+  },
+  methods: {
+    storageChange(e) {
+      if (e.key !== "logged_in") {
+        return;
+      }
+      const auth = JSON.parse(e.newValue);
+      if (auth) {
+        this.$router.push("/");
+      } else {
+        this.$router.push("/auth");
+      }
+    },
+  },
+};
 </script>
 
 <style lang="scss">

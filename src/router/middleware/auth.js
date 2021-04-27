@@ -1,5 +1,6 @@
 export default function auth({ next, store }) {
-    if (!store.getters.auth.loggedIn) {
+    const auth = JSON.parse(localStorage.getItem("logged_in"))
+    if (!auth) {
         return next({
             name: 'auth'
         })

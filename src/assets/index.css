@@ -19,3 +19,19 @@
 .helper-text.invalid {
   color: #f44336;
 }
+
+.page-title {
+  opacity: 0.8;
+  font-size: 2rem;
+}
+
+.navbar {
+  padding: 0 2rem;
+}
+
+#toast-container {
+  min-width: 10%;
+  top: 50%;
+  right: 50%;
+  transform: translateX(50%) translateY(50%);
+}
