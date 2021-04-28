@@ -32,25 +32,23 @@ export default new Vuex.Store({
 
       try {
         const response = await this._vm.$api.auth.signIn();
-        console.log(response);
         const authAccess = response.data.code.includes(userCode);
         if (authAccess) {
-          commit("userAuth")
-          localStorage.setItem('logged_in', true)
+          commit("userAuth");
+          localStorage.setItem('logged_in', true);
         }
+        return authAccess;
       }
       catch (e) {
-        commit('setError', e)
-        throw e
+        commit('setError', e);
+        throw e;
       }
     },
 
     signOut({ dispatch, commit }) {
-      commit("userLogout")
-      localStorage.setItem('logged_in', false)
+      commit("userLogout");
+      localStorage.setItem('logged_in', false);
     }
-  },
-  modules: {
   },
   plugins: [createPersistedState()],
 })

@@ -17,12 +17,12 @@
       </ul>
       <ul id="dropdown1" class="dropdown-content">
         <li>
-          <a href="#!" @click.prevent="signOut"
+          <a href="#" @click.prevent
             >Профиль<i class="material-icons">account_circle</i></a
           >
         </li>
         <li>
-          <a href="#!" @click.prevent="signOut"
+          <a href="#" @click.prevent="signOut"
             >Выйти<i class="material-icons">assignment_return</i></a
           >
         </li>
@@ -49,9 +49,9 @@ export default {
     }
   },
   methods: {
-    signOut() {
+    async signOut() {
       try {
-        this.$store.dispatch("signOut");
+        await this.$store.dispatch("signOut");
         this.$router.push("/auth");
       } catch (e) {
         console.log(e);
