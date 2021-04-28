@@ -5,18 +5,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
-  computed: {
-    ...mapGetters({ auth: "auth" }),
-    authState() {
-      return JSON.parse(localStorage.getItem("vuex")).loggedIn;
-    },
-  },
   mounted() {
-    window.addEventListener("storage", this.storageChange, false);
+    window.addEventListener("storage", this.storageChange);
   },
+
   methods: {
     storageChange(e) {
       if (e.key !== "logged_in") {
@@ -29,6 +22,10 @@ export default {
         this.$router.push("/auth");
       }
     },
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("storage", this.storageChange);
   },
 };
 </script>
