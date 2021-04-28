@@ -17,6 +17,7 @@
               id="code"
               type="text"
               v-model.trim="code"
+              ref="codeInput"
               :class="{
                 invalid:
                   ($v.code.$dirty && !$v.code.required) ||
@@ -85,13 +86,21 @@ export default {
 
       try {
         this.isLoading = true;
-        await this.$store.dispatch("signInByCode", this.code);
-        if (this.$store.getters.auth) {
+        const isCorrectCode = await this.$store.dispatch(
+          "signInByCode",
+          this.code
+        );
+        if (isCorrectCode) {
           this.$router.push("/");
         } else {
           this.code = "";
-          this.isLoading = false;
-          this.$message("Такого кода не существует");
+          setTimeout(() => {
+            this.isLoading = false;
+            this.$message("Такого кода не существует");
+            this.$nextTick(() => {
+              this.$refs.codeInput.focus();
+            });
+          }, 800);
         }
       } catch (e) {}
     },
